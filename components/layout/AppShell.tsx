@@ -1,8 +1,10 @@
 'use client';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
+import { useDataInit } from '@/lib/hooks/useDataInit';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  useDataInit();
   return (
     <div className="flex h-screen overflow-hidden" style={{ backgroundColor: '#FAFAF9' }}>
       <Sidebar />

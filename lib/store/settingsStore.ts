@@ -1,12 +1,19 @@
 'use client';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { AppSettings, Theme } from '@/lib/types';
+import type { AppSettings, Theme, TeamMember } from '@/lib/types';
 import { TEAM_MEMBERS } from '@/lib/data/mockData';
-import type { TeamMember } from '@/lib/types';
+import { fetchTeamMembers } from '@/lib/supabase/queries';
+
+const hasSupabase = !!(
+  process.env.NEXT_PUBLIC_SUPABASE_URL &&
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
 
 interface SettingsState extends AppSettings {
   teamMembers: TeamMember[];
+  isLoadingTeam: boolean;
+  loadTeamMembers: () => Promise<void>;
   updateTheme: (theme: Theme) => void;
   updateAccentColor: (color: string) => void;
   toggleSidebarCompact: () => void;
@@ -34,6 +41,20 @@ export const useSettingsStore = create<SettingsState>()(
         defaultTimelineView: 'gantt',
       },
       teamMembers: TEAM_MEMBERS,
+      isLoadingTeam: false,
+
+      loadTeamMembers: async () => {
+        if (!hasSupabase) return;
+        set({ isLoadingTeam: true });
+        try {
+          const teamMembers = await fetchTeamMembers();
+          if (teamMembers.length > 0) set({ teamMembers });
+        } catch (err) {
+          console.error('[settingsStore] loadTeamMembers failed:', err);
+        } finally {
+          set({ isLoadingTeam: false });
+        }
+      },
 
       updateTheme: (theme) => set({ theme }),
       updateAccentColor: (accentColor) => set({ accentColor }),

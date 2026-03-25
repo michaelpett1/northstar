@@ -1,0 +1,26 @@
+# Supabase local development configuration
+# Run `supabase start` to spin up a local Postgres + API stack
+# See: https://supabase.com/docs/guides/local-development
+
+[api]
+port = 54321
+schemas = ["public"]
+
+[db]
+port = 54322
+major_version = 15
+
+[studio]
+port = 54323
+
+[inbucket]
+port = 54324
+
+[auth]
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["https://localhost:3000"]
+jwt_expiry = 3600
+enable_signup = true
+
+[auth.email]
+enable_confirmations = false

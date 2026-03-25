@@ -48,16 +48,17 @@ const inputStyle = {
 export function CheckInModal({ kr, objectiveId, onClose }: CheckInModalProps) {
   const [value, setValue] = useState(kr.currentValue);
   const [note, setNote] = useState('');
+  const [saving, setSaving] = useState(false);
   const { addCheckIn } = useOKRsStore();
 
-  const handleSubmit = () => {
-    addCheckIn(objectiveId, kr.id, {
-      id: `ci-${Date.now()}`,
-      value,
-      note,
-      createdAt: new Date().toISOString(),
-    });
-    onClose();
+  const handleSubmit = async () => {
+    setSaving(true);
+    try {
+      await addCheckIn(objectiveId, kr.id, { value, note });
+      onClose();
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -125,7 +126,9 @@ export function CheckInModal({ kr, objectiveId, onClose }: CheckInModalProps) {
         {/* Actions */}
         <div className="flex justify-end gap-2 pt-1">
           <Button variant="ghost" size="sm" onClick={onClose}>Cancel</Button>
-          <Button variant="primary" size="sm" onClick={handleSubmit}>Save Check-in</Button>
+          <Button variant="primary" size="sm" onClick={handleSubmit} disabled={saving}>
+            {saving ? 'Saving…' : 'Save Check-in'}
+          </Button>
         </div>
       </div>
     </Modal>
