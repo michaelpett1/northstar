@@ -373,7 +373,7 @@ export const useRoadmapStore = create<RoadmapState>()(
     },
     {
       name: 'northstar-roadmap',
-      version: 5,
+      version: 6,
       migrate: (persisted: unknown, version: number) => {
         const state = persisted as Record<string, unknown>;
         if (version < 2) {
@@ -388,6 +388,20 @@ export const useRoadmapStore = create<RoadmapState>()(
             localStorage.removeItem('northstar-roadmap-seeded');
           }
           return { ...state, tasks: [], _undoStack: [] };
+        }
+        if (version < 6) {
+          // v6: Migrate boolean priority to P0-P3 string
+          const tasks = (state.tasks as Array<Record<string, unknown>>) ?? [];
+          return {
+            ...state,
+            tasks: tasks.map(t => ({
+              ...t,
+              priority: typeof t.priority === 'boolean'
+                ? (t.priority ? 'p0' : 'p2')
+                : (t.priority ?? 'p2'),
+            })),
+            _undoStack: [],
+          };
         }
         return state;
       },
