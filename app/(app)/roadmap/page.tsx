@@ -442,13 +442,11 @@ function SprintDropZone({
               </div>
             ) : (
               [...tasks].sort((a, b) => {
-                // Sort by priority rank first (P0 → P3)
-                const pr = safePriorityRank(a.priority) - safePriorityRank(b.priority);
-                if (pr !== 0) return pr;
-                // Then dev before UX within same priority
+                // Dev first, then UX
                 if (a.type === 'dev' && b.type !== 'dev') return -1;
                 if (a.type !== 'dev' && b.type === 'dev') return 1;
-                return 0;
+                // Within same type, sort by priority (P0 → P3)
+                return safePriorityRank(a.priority) - safePriorityRank(b.priority);
               }).map(task => (
                 <TaskCard key={task.id} task={task} onDragStart={onDragStart} onEdit={onEditTask} onDelete={onDeleteTask} onClone={onCloneTask} />
               ))
