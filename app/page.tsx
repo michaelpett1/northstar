@@ -50,18 +50,21 @@ const STEPS = [
     number: '01',
     title: 'Connect your tools',
     description: 'Link JIRA, Confluence, and Slack. Northstar begins scanning on your schedule.',
+    callout: '"Which JIRA projects should Northstar monitor for roadmap items?"',
   },
   {
     icon: Sparkles,
     number: '02',
     title: 'Review suggestions',
-    description: 'AI surfaces relevant items, scored by priority and checked for duplicates.',
+    description: 'AI surfaces relevant items, scored by priority and checked for duplicates. Review each suggestion and accept, dismiss, or defer it at any time.',
+    callout: 'A suggestion scored at 0.85 means Northstar believes there\'s an ~85% chance it belongs on your roadmap.',
   },
   {
     icon: CheckCircle,
     number: '03',
     title: 'Build your roadmap',
-    description: 'Accept suggestions with one click. They appear in your timeline and visual roadmap instantly.',
+    description: 'Accepted suggestions populate your timeline and visual roadmap automatically.',
+    callout: 'Accepted items land in your timeline instantly. Dismissed items are archived.',
   },
 ];
 
@@ -509,89 +512,163 @@ export default function LandingPage() {
       {/* ─── How it works ────────────────────────────────────── */}
       <section
         style={{
-          background: '#F8FAFC',
-          borderTop: '1px solid rgba(0,0,0,0.04)',
-          borderBottom: '1px solid rgba(0,0,0,0.04)',
+          background: 'var(--bg-secondary)',
+          borderTop: '1px solid var(--border-light)',
+          borderBottom: '1px solid var(--border-light)',
         }}
       >
         <div style={{ maxWidth: 1200, margin: '0 auto', padding: '80px 24px' }}>
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <h2
               style={{
                 fontSize: 32,
                 fontWeight: 800,
-                color: '#0F172A',
+                color: 'var(--text-primary)',
                 letterSpacing: '-0.02em',
                 margin: 0,
               }}
             >
               How it works
             </h2>
-            <p style={{ fontSize: 16, color: '#6B7280', marginTop: 12 }}>
-              Three steps to a roadmap that keeps itself updated.
+            <p style={{ fontSize: 16, color: 'var(--text-tertiary)', marginTop: 12, margin: '12px auto 0' }}>
+              Every project follows the same three-stage lifecycle
             </p>
+
+            {/* Stage pills */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 24 }}>
+              {STEPS.map((step, i) => (
+                <div key={step.number} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <span
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      padding: '6px 16px',
+                      borderRadius: 99,
+                      background: 'var(--app-accent)',
+                      color: '#FFFFFF',
+                      fontSize: 13,
+                      fontWeight: 600,
+                    }}
+                  >
+                    {step.title}
+                  </span>
+                  {i < STEPS.length - 1 && (
+                    <ArrowRight size={16} style={{ color: 'var(--text-muted)' }} />
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
 
+          {/* Cards */}
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-              gap: 32,
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: 24,
             }}
           >
             {STEPS.map((step) => {
               const Icon = step.icon;
               return (
-                <div key={step.number} style={{ textAlign: 'center' }}>
-                  <div
-                    style={{
-                      width: 56,
-                      height: 56,
-                      borderRadius: '50%',
-                      background: 'linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      margin: '0 auto 20px',
-                    }}
-                  >
-                    <Icon size={24} style={{ color: '#4F46E5' }} />
-                  </div>
+                <div
+                  key={step.number}
+                  style={{
+                    background: 'var(--bg-primary)',
+                    border: '1px solid var(--border)',
+                    borderRadius: 'var(--radius-lg)',
+                    padding: 28,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 16,
+                    boxShadow: 'var(--card-shadow)',
+                  }}
+                >
+                  {/* Stage label */}
                   <span
                     style={{
-                      display: 'block',
                       fontSize: 11,
                       fontWeight: 700,
+                      letterSpacing: '0.06em',
+                      color: 'var(--app-accent)',
                       fontFamily: 'ui-monospace, monospace',
-                      color: '#2563EB',
-                      marginBottom: 8,
                     }}
                   >
                     STEP {step.number}
                   </span>
+
+                  {/* Large number */}
+                  <div>
+                    <span
+                      style={{
+                        fontSize: 48,
+                        fontWeight: 300,
+                        lineHeight: 1,
+                        color: 'var(--text-primary)',
+                        letterSpacing: '-0.03em',
+                      }}
+                    >
+                      {step.number}
+                    </span>
+                    <div
+                      style={{
+                        height: 2,
+                        width: '100%',
+                        background: 'var(--app-accent)',
+                        borderRadius: 1,
+                        marginTop: 12,
+                      }}
+                    />
+                  </div>
+
+                  {/* Title */}
                   <h3
                     style={{
                       fontSize: 17,
                       fontWeight: 700,
-                      color: '#1C1917',
-                      margin: '0 0 8px',
+                      color: 'var(--text-primary)',
+                      margin: 0,
                     }}
                   >
                     {step.title}
                   </h3>
+
+                  {/* Description */}
                   <p
                     style={{
                       fontSize: 14,
-                      lineHeight: 1.6,
-                      color: '#6B7280',
+                      lineHeight: 1.65,
+                      color: 'var(--text-tertiary)',
                       margin: 0,
-                      maxWidth: 320,
-                      marginLeft: 'auto',
-                      marginRight: 'auto',
                     }}
                   >
                     {step.description}
                   </p>
+
+                  {/* Callout */}
+                  {step.callout && (
+                    <div
+                      style={{
+                        marginTop: 'auto',
+                        paddingTop: 8,
+                      }}
+                    >
+                      <div
+                        style={{
+                          borderLeft: '3px solid var(--app-accent)',
+                          background: 'var(--app-accent-subtle)',
+                          borderRadius: '0 var(--radius-sm) var(--radius-sm) 0',
+                          padding: '10px 14px',
+                          fontSize: 13,
+                          lineHeight: 1.55,
+                          color: 'var(--text-secondary)',
+                        }}
+                      >
+                        {step.callout}
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}
