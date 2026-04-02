@@ -205,7 +205,7 @@ function TaskCard({
             letterSpacing: '0.04em',
           }}
         >
-          {safePriority(task.priority).toUpperCase()}
+          {safePriority(task.priority) === 'p0' && '🔥 '}{safePriority(task.priority).toUpperCase()}
         </span>
       </div>
 
@@ -442,11 +442,13 @@ function SprintDropZone({
               </div>
             ) : (
               [...tasks].sort((a, b) => {
-                // Dev first, then UX
+                // Sort by priority rank first (P0 → P3)
+                const pr = safePriorityRank(a.priority) - safePriorityRank(b.priority);
+                if (pr !== 0) return pr;
+                // Then dev before UX within same priority
                 if (a.type === 'dev' && b.type !== 'dev') return -1;
                 if (a.type !== 'dev' && b.type === 'dev') return 1;
-                // Within same type, sort by priority rank (p0 first)
-                return safePriorityRank(a.priority) - safePriorityRank(b.priority);
+                return 0;
               }).map(task => (
                 <TaskCard key={task.id} task={task} onDragStart={onDragStart} onEdit={onEditTask} onDelete={onDeleteTask} onClone={onCloneTask} />
               ))
@@ -1487,9 +1489,11 @@ export default function RoadmapPage() {
                 }}
               >
                 {[...planningTasks].sort((a, b) => {
+                  const pr = safePriorityRank(a.priority) - safePriorityRank(b.priority);
+                  if (pr !== 0) return pr;
                   if (a.type === 'dev' && b.type !== 'dev') return -1;
                   if (a.type !== 'dev' && b.type === 'dev') return 1;
-                  return safePriorityRank(a.priority) - safePriorityRank(b.priority);
+                  return 0;
                 }).map(task => (
                   <TaskCard
                     key={task.id}
