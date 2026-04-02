@@ -10,16 +10,11 @@ import { useDataInit } from '@/lib/hooks/useDataInit';
 import { useSettingsStore } from '@/lib/store/settingsStore';
 import { useAuthStore } from '@/lib/store/authStore';
 
-const hasSupabase = !!(
-  typeof window !== 'undefined' &&
-  process.env.NEXT_PUBLIC_SUPABASE_URL &&
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
-
 export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { initialize, isInitialized, isLoading, user, workspaces, currentWorkspace } = useAuthStore();
-  const [skipAuth] = useState(!hasSupabase);
+  const skipAuth = true; // TODO: restore when Supabase is configured
+  // const skipAuth = !process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   // Initialize auth on mount (only if Supabase is configured)
   useEffect(() => {
