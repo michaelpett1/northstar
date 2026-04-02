@@ -1489,11 +1489,9 @@ export default function RoadmapPage() {
                 }}
               >
                 {[...planningTasks].sort((a, b) => {
-                  const pr = safePriorityRank(a.priority) - safePriorityRank(b.priority);
-                  if (pr !== 0) return pr;
                   if (a.type === 'dev' && b.type !== 'dev') return -1;
                   if (a.type !== 'dev' && b.type === 'dev') return 1;
-                  return 0;
+                  return safePriorityRank(a.priority) - safePriorityRank(b.priority);
                 }).map(task => (
                   <TaskCard
                     key={task.id}
