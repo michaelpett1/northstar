@@ -403,8 +403,12 @@ function SprintDropZone({
               </div>
             ) : (
               [...tasks].sort((a, b) => {
+                // Dev first, then UX
                 if (a.type === 'dev' && b.type !== 'dev') return -1;
                 if (a.type !== 'dev' && b.type === 'dev') return 1;
+                // Within same type, priority first
+                if (a.priority && !b.priority) return -1;
+                if (!a.priority && b.priority) return 1;
                 return 0;
               }).map(task => (
                 <TaskCard key={task.id} task={task} onDragStart={onDragStart} onEdit={onEditTask} onDelete={onDeleteTask} onClone={onCloneTask} />
@@ -1444,7 +1448,13 @@ export default function RoadmapPage() {
                   borderBottom: '1px solid var(--border)',
                 }}
               >
-                {planningTasks.map(task => (
+                {[...planningTasks].sort((a, b) => {
+                  if (a.type === 'dev' && b.type !== 'dev') return -1;
+                  if (a.type !== 'dev' && b.type === 'dev') return 1;
+                  if (a.priority && !b.priority) return -1;
+                  if (!a.priority && b.priority) return 1;
+                  return 0;
+                }).map(task => (
                   <TaskCard
                     key={task.id}
                     task={task}

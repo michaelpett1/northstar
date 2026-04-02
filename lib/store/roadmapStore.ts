@@ -21,7 +21,8 @@ const hasSupabase = !!(
 
 // Sprints: 2-week sprints starting 2026-01-01. Generate 26 sprints (full year).
 export function generateSprints(count = 26) {
-  const base = new Date('2026-01-01');
+  // Sprint 6 is current (contains Apr 2 2026), Sprint 7 starts Apr 9
+  const base = new Date('2026-01-15');
   return Array.from({ length: count }, (_, i) => {
     const start = new Date(base);
     start.setDate(base.getDate() + i * 14);
@@ -80,6 +81,7 @@ interface RoadmapState {
   addProject: (name: string) => void;
   addTeam: (name: string) => void;
   moveTask: (id: string, toSprint: number) => void;
+  shiftAllTasksUp: () => void;
   getCapacity: (sprintNumber: number) => SprintCapacity;
   setCapacity: (sprintNumber: number, type: 'dev' | 'ux', value: number) => void;
   seedIfEmpty: (workspaceId?: string) => void;
@@ -179,6 +181,19 @@ export const useRoadmapStore = create<RoadmapState>()(
             console.error('[roadmapStore] moveTask persist failed:', err);
           });
         }
+      },
+
+      shiftAllTasksUp: () => {
+        const { tasks } = get();
+        if (tasks.length === 0) return;
+        pushUndo('Shift all tasks up one sprint');
+        set({
+          tasks: tasks.map(t => ({
+            ...t,
+            startSprint: Math.max(0, t.startSprint - 1),
+            endSprint: Math.max(0, t.endSprint - 1),
+          })),
+        });
       },
 
       seedIfEmpty: (workspaceId?: string) => {
