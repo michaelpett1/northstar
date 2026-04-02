@@ -18,13 +18,24 @@ function typeColor(type: 'ux' | 'dev') {
   return type === 'ux' ? UX_COLOR : DEV_COLOR;
 }
 
-const PRIORITY_RANK: Record<Priority, number> = { p0: 0, p1: 1, p2: 2, p3: 3 };
-const PRIORITY_COLORS: Record<Priority, { bg: string; text: string }> = {
+const PRIORITY_RANK: Record<string, number> = { p0: 0, p1: 1, p2: 2, p3: 3 };
+const PRIORITY_COLORS: Record<string, { bg: string; text: string }> = {
   p0: { bg: '#FEE2E2', text: '#DC2626' },
   p1: { bg: '#FEF3C7', text: '#D97706' },
   p2: { bg: '#DBEAFE', text: '#2563EB' },
   p3: { bg: '#F3F4F6', text: '#6B7280' },
 };
+const DEFAULT_PRIORITY_COLOR = { bg: '#F3F4F6', text: '#6B7280' };
+
+/** Safely normalise any legacy priority value to a valid Priority string */
+function safePriority(p: unknown): Priority {
+  if (p === 'p0' || p === 'p1' || p === 'p2' || p === 'p3') return p;
+  if (p === true) return 'p0';
+  return 'p2';
+}
+function safePriorityRank(p: unknown): number {
+  return PRIORITY_RANK[String(p)] ?? 2;
+}
 
 const SPRINTS = generateSprints(26);
 
@@ -187,14 +198,14 @@ function TaskCard({
           style={{
             fontSize: 9,
             fontWeight: 700,
-            color: PRIORITY_COLORS[task.priority].text,
-            background: PRIORITY_COLORS[task.priority].bg,
+            color: (PRIORITY_COLORS[task.priority] ?? DEFAULT_PRIORITY_COLOR).text,
+            background: (PRIORITY_COLORS[task.priority] ?? DEFAULT_PRIORITY_COLOR).bg,
             borderRadius: 3,
             padding: '1px 5px',
             letterSpacing: '0.04em',
           }}
         >
-          {task.priority.toUpperCase()}
+          {safePriority(task.priority).toUpperCase()}
         </span>
       </div>
 
@@ -435,7 +446,7 @@ function SprintDropZone({
                 if (a.type === 'dev' && b.type !== 'dev') return -1;
                 if (a.type !== 'dev' && b.type === 'dev') return 1;
                 // Within same type, sort by priority rank (p0 first)
-                return PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority];
+                return safePriorityRank(a.priority) - safePriorityRank(b.priority);
               }).map(task => (
                 <TaskCard key={task.id} task={task} onDragStart={onDragStart} onEdit={onEditTask} onDelete={onDeleteTask} onClone={onCloneTask} />
               ))
@@ -1478,7 +1489,7 @@ export default function RoadmapPage() {
                 {[...planningTasks].sort((a, b) => {
                   if (a.type === 'dev' && b.type !== 'dev') return -1;
                   if (a.type !== 'dev' && b.type === 'dev') return 1;
-                  return PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority];
+                  return safePriorityRank(a.priority) - safePriorityRank(b.priority);
                 }).map(task => (
                   <TaskCard
                     key={task.id}
