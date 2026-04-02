@@ -6,7 +6,7 @@
     <title>Poker Strategy | Gambling.com</title>
     <meta name="description" content="Expert poker strategy guides covering starting hands, bluffing, position play, pot odds and bankroll management.">
     <meta property="og:title" content="Poker Strategy | Gambling.com">
-    <meta property="og:description" content="Free poker strategy guides from our experts. Master Texas Hold'em, Omaha and more.">
+    <meta property="og:description" content="Free poker strategy guides from our experts.">
     <meta property="og:type" content="website">
     <link rel="canonical" href="https://www.gambling.com/guides/poker">
 
@@ -25,44 +25,23 @@
         img { display: block; max-width: 100%; }
         ol, ul { list-style: none; }
         button { font-family: 'Red Hat Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-        .hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
         .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     </style>
 
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'gdc-blue': '#0157FF',
-                        'gdc-blue-hover': '#003EE6',
-                        'gdc-red': '#FF0000',
-                        'gdc-grey': '#ECECEF',
-                        'gdc-black': '#000000',
-                        'gdc-white': '#FFFFFF',
-                        'gdc-deep-grey': '#999999',
-                        'gdc-deep-blue-navy': '#050A30',
-                        'gdc-light-blue': '#E6F1FC',
-                    },
-                    fontFamily: {
-                        gdc: ['Red Hat Display', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
-                    },
-                },
-            },
+            theme: { extend: { colors: { 'gdc-blue': '#0157FF', 'gdc-blue-hover': '#003EE6', 'gdc-red': '#FF0000', 'gdc-grey': '#ECECEF', 'gdc-black': '#000000', 'gdc-white': '#FFFFFF', 'gdc-deep-grey': '#999999', 'gdc-deep-blue-navy': '#050A30', 'gdc-light-blue': '#E6F1FC' }, fontFamily: { gdc: ['Red Hat Display', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'] } } },
         };
     </script>
 </head>
 <body>
     <div id="app">
         <site-header></site-header>
-
         <main>
             <!-- Breadcrumb -->
             <div class="border-b border-[#ECECEF]">
-                <div class="max-w-[1140px] mx-auto px-6 py-3">
+                <div class="max-w-[1200px] mx-auto px-6 py-3">
                     <nav class="flex items-center gap-2 text-sm text-gdc-deep-grey" aria-label="Breadcrumb">
                         <a href="https://www.gambling.com" class="text-gdc-deep-grey font-normal hover:text-gdc-blue">Gambling.com</a>
                         <span aria-hidden="true">&#187;</span>
@@ -74,58 +53,46 @@
             </div>
 
             <!-- Page Header -->
-            <section class="pt-8 pb-2">
-                <div class="max-w-[1140px] mx-auto px-6">
-                    <h1 class="text-[29px] font-semibold leading-10 mb-2">Poker Strategy</h1>
-                    <p class="text-base text-gdc-deep-grey mb-0">Master Texas Hold'em, Omaha and tournament play</p>
+            <section class="pt-8 pb-6">
+                <div class="max-w-[1200px] mx-auto px-6">
+                    <h1 class="text-[32px] font-bold leading-10 mb-2">Poker Strategy</h1>
+                    <p class="text-base text-gdc-deep-grey">Master Texas Hold'em, Omaha and tournament play</p>
                 </div>
             </section>
 
-            <!-- Main Content: Articles + Sidebar -->
-            <section class="py-6">
-                <div class="max-w-[1140px] mx-auto px-6">
-                    <div class="grid grid-cols-[1fr_320px] gap-8 max-lg:grid-cols-1">
+            <!-- Featured Article -->
+            <section class="pb-8">
+                <div class="max-w-[1200px] mx-auto px-6">
+                    <featured-card :article="pageData.allArticles[0]"></featured-card>
+                </div>
+            </section>
 
-                        <!-- Main Column -->
-                        <div>
-                            <!-- Featured / Trending Article -->
-                            <news-featured :article="pageData.pokerStrategy[0]" badge-text="TRENDING" badge-color="gdc-red"></news-featured>
+            <!-- 3-Column Article Grid -->
+            <section class="pb-8">
+                <div class="max-w-[1200px] mx-auto px-6">
+                    <div class="grid grid-cols-3 gap-6 max-lg:grid-cols-2 max-sm:grid-cols-1">
+                        <article-card v-for="article in pageData.allArticles.slice(1)" :key="article.url" :article="article"></article-card>
+                    </div>
+                </div>
+            </section>
 
-                            <!-- 2-Column Article Grid -->
-                            <div class="grid grid-cols-2 gap-6 mt-6 max-sm:grid-cols-1">
-                                <news-card v-for="article in pageData.pokerStrategy.slice(1)" :key="article.url" :article="article"></news-card>
-                            </div>
-
-                            <!-- Poker Guides Section -->
-                            <div class="mt-10 pt-8 border-t border-[#ECECEF]">
-                                <h2 class="text-[23px] font-bold leading-8 text-black mb-2">Poker Guides</h2>
-                                <p class="text-sm text-gdc-deep-grey mb-6">Latest Poker Guides</p>
-
-                                <div class="grid grid-cols-2 gap-6 max-sm:grid-cols-1">
-                                    <news-card v-for="article in pageData.pokerGuides" :key="article.url" :article="article"></news-card>
-                                </div>
-                            </div>
-
-                            <!-- All Poker Strategy link -->
-                            <div class="mt-8 flex justify-center">
-                                <a href="https://www.gambling.com/strategy/online-poker" class="inline-flex items-center justify-center h-12 px-8 rounded-lg border border-[#ECECEF] text-base font-semibold text-black no-underline hover:no-underline hover:bg-gray-50 transition-colors">
-                                    All Poker Strategy
-                                </a>
-                            </div>
+            <!-- Pagination -->
+            <section class="pb-10">
+                <div class="max-w-[1200px] mx-auto px-6">
+                    <div class="flex flex-col items-center gap-3 pt-4">
+                        <p class="text-sm text-gdc-deep-grey">1 – {{ pageData.allArticles.length }} out of {{ pageData.allArticles.length }}</p>
+                        <div class="flex items-center gap-1">
+                            <button class="w-9 h-9 rounded-md border border-[#ECECEF] flex items-center justify-center text-gdc-deep-grey hover:bg-gray-50 cursor-pointer bg-white"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+                            <button class="w-9 h-9 rounded-md bg-gdc-blue text-white text-sm font-bold flex items-center justify-center border-none cursor-pointer">1</button>
+                            <button class="w-9 h-9 rounded-md border border-[#ECECEF] flex items-center justify-center text-gdc-deep-grey hover:bg-gray-50 cursor-pointer bg-white"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg></button>
                         </div>
-
-                        <!-- Sidebar -->
-                        <aside class="max-lg:hidden">
-                            <news-sidebar :strategy-articles="pageData.pokerStrategy" :guide-articles="pageData.pokerGuides"></news-sidebar>
-                        </aside>
-
                     </div>
                 </div>
             </section>
 
             <!-- Explore More Strategies -->
-            <section class="py-10 border-t border-[#ECECEF] mt-4">
-                <div class="max-w-[1140px] mx-auto px-6">
+            <section class="py-10 border-t border-[#ECECEF]">
+                <div class="max-w-[1200px] mx-auto px-6">
                     <h2 class="text-xl font-semibold mb-6">Explore More Strategies</h2>
                     <div class="grid grid-cols-3 gap-4 max-[480px]:gap-2">
                         <a href="preview.html" class="no-underline text-inherit rounded-lg overflow-hidden transition-shadow duration-200 hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)] hover:no-underline">
@@ -144,7 +111,6 @@
                 </div>
             </section>
         </main>
-
         <rewards-banner></rewards-banner>
         <site-footer></site-footer>
     </div>
@@ -153,225 +119,112 @@
         const { createApp } = Vue;
 
         const pageData = {
-            pokerStrategy: [
-                { title: 'Poker Basics: Starting Hands', url: 'https://www.gambling.com/strategy/online-poker/poker-basics-starting-hands', image: 'https://objects.kaxmedia.com/genesis/how-to-play-stud-poker.webp', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'Learn which starting hands to play and which to fold. Our guide covers premium hands, suited connectors and position-based ranges for beginners.', category: 'Hold\'em', timeAgo: '2 hours ago' },
-                { title: 'Explaining Pocket Pairs and How to Play Them', url: 'https://www.gambling.com/strategy/online-poker/explaining-pocket-pairs-and-how-to-play-them', image: 'https://objects.kaxmedia.com/genesis/pocket-pairs.jpg', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'A complete guide to playing pocket pairs from deuces through aces, including set-mining strategies.', category: 'Hold\'em', timeAgo: '5 hours ago' },
-                { title: 'Tips for Bluffing in Poker', url: 'https://www.gambling.com/strategy/online-poker/tips-for-bluffing-in-poker', image: 'https://objects.kaxmedia.com/genesis/bluffing-poster.jpg', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'When to bluff, how to size your bets and reading opponents. Essential bluffing strategy for all levels.', category: 'Strategy', timeAgo: '1 day ago' },
-                { title: 'Poker Strategy: The Power of Position', url: 'https://www.gambling.com/strategy/online-poker/poker-strategy-the-power-of-position', image: 'https://objects.kaxmedia.com/genesis/money-on-table.jpg', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'Why position is the most important concept in poker and how to exploit it at every street.', category: 'Strategy', timeAgo: '2 days ago' },
-                { title: 'Poker Math: Calculating Pot Odds For Beginners', url: 'https://www.gambling.com/strategy/online-poker/poker-math-calculating-texas-hold-em-poker-pot-odds-for-beginners', image: 'https://objects.kaxmedia.com/genesis/math-calculation.jpg', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'A simple guide to pot odds, implied odds and how to use them to make profitable decisions.', category: 'Math', timeAgo: '3 days ago' },
-                { title: 'The Benefits of Effective Poker Bankroll Management', url: 'https://www.gambling.com/strategy/online-poker/the-benefits-of-effective-poker-bankroll-management', image: 'https://objects.kaxmedia.com/genesis/poker-bankroll-management.jpg', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'Protect your poker bankroll with proven management techniques for cash games and tournaments.', category: 'Bankroll', timeAgo: '4 days ago' },
-            ],
-            pokerGuides: [
-                { title: 'Different Poker Games Explained (Hold\'em, Omaha, Stud, Draw)', url: 'https://www.gambling.com/strategy/online-poker/different-poker-games', image: 'https://objects.kaxmedia.com/genesis/how-to-play-stud-poker.webp', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'A comprehensive overview of all major poker variants and how the rules differ between them.', category: 'Guide', timeAgo: '1 day ago' },
-                { title: 'How to Read Poker Tells Online and Live', url: 'https://www.gambling.com/strategy/online-poker/poker-tells', image: 'https://objects.kaxmedia.com/genesis/bluffing-poster.jpg', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'Spot the subtle tells that give away your opponents\' hands in both live and online poker.', category: 'Guide', timeAgo: '3 days ago' },
-                { title: 'Tournament Poker Strategy for Beginners', url: 'https://www.gambling.com/strategy/online-poker/tournament-strategy', image: 'https://objects.kaxmedia.com/genesis/money-on-table.jpg', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'Navigate the early, middle and late stages of poker tournaments with confidence.', category: 'Tournament', timeAgo: '5 days ago' },
-                { title: 'Understanding Poker Hand Rankings', url: 'https://www.gambling.com/strategy/online-poker/hand-rankings', image: 'https://objects.kaxmedia.com/genesis/pocket-pairs.jpg', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'From high card to royal flush — learn every poker hand ranking and their relative strength.', category: 'Guide', timeAgo: '1 week ago' },
+            allArticles: [
+                { title: 'Poker Basics: Starting Hands', url: 'https://www.gambling.com/strategy/online-poker/poker-basics-starting-hands', image: 'https://objects.kaxmedia.com/genesis/how-to-play-stud-poker.webp', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'Learn which starting hands to play and which to fold. Our guide covers premium hands, suited connectors and position-based ranges for beginners.', readTime: '6 min read', timeAgo: '2 hours ago', region: 'UK', featured: true },
+                { title: 'Explaining Pocket Pairs and How to Play Them', url: 'https://www.gambling.com/strategy/online-poker/explaining-pocket-pairs-and-how-to-play-them', image: 'https://objects.kaxmedia.com/genesis/pocket-pairs.jpg', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'A complete guide to playing pocket pairs from deuces through aces, including set-mining strategies.', readTime: '5 min read', timeAgo: '5 hours ago', region: 'UK' },
+                { title: 'Tips for Bluffing in Poker', url: 'https://www.gambling.com/strategy/online-poker/tips-for-bluffing-in-poker', image: 'https://objects.kaxmedia.com/genesis/bluffing-poster.jpg', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'When to bluff, how to size your bets and reading opponents. Essential bluffing strategy for all levels.', readTime: '4 min read', timeAgo: '1 day ago', region: 'UK' },
+                { title: 'Poker Strategy: The Power of Position', url: 'https://www.gambling.com/strategy/online-poker/poker-strategy-the-power-of-position', image: 'https://objects.kaxmedia.com/genesis/money-on-table.jpg', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'Why position is the most important concept in poker and how to exploit it at every street.', readTime: '3 min read', timeAgo: '2 days ago', region: 'UK' },
+                { title: 'Poker Math: Calculating Pot Odds For Beginners', url: 'https://www.gambling.com/strategy/online-poker/poker-math-calculating-texas-hold-em-poker-pot-odds-for-beginners', image: 'https://objects.kaxmedia.com/genesis/math-calculation.jpg', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'A simple guide to pot odds, implied odds and how to use them to make profitable decisions.', readTime: '5 min read', timeAgo: '3 days ago', region: 'UK' },
+                { title: 'The Benefits of Effective Poker Bankroll Management', url: 'https://www.gambling.com/strategy/online-poker/the-benefits-of-effective-poker-bankroll-management', image: 'https://objects.kaxmedia.com/genesis/poker-bankroll-management.jpg', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'Protect your poker bankroll with proven management techniques for cash games and tournaments.', readTime: '4 min read', timeAgo: '4 days ago', region: 'UK' },
+                { title: 'Different Poker Games Explained (Hold\'em, Omaha, Stud, Draw)', url: 'https://www.gambling.com/strategy/online-poker/different-poker-games', image: 'https://objects.kaxmedia.com/genesis/how-to-play-stud-poker.webp', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'A comprehensive overview of all major poker variants and how the rules differ between them.', readTime: '5 min read', timeAgo: '5 days ago', region: 'UK' },
+                { title: 'How to Read Poker Tells Online and Live', url: 'https://www.gambling.com/strategy/online-poker/poker-tells', image: 'https://objects.kaxmedia.com/genesis/bluffing-poster.jpg', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'Spot the subtle tells that give away your opponents\' hands in both live and online poker.', readTime: '3 min read', timeAgo: '1 week ago', region: 'UK' },
+                { title: 'Tournament Poker Strategy for Beginners', url: 'https://www.gambling.com/strategy/online-poker/tournament-strategy', image: 'https://objects.kaxmedia.com/genesis/money-on-table.jpg', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'Navigate the early, middle and late stages of poker tournaments with confidence.', readTime: '4 min read', timeAgo: '1 week ago', region: 'UK' },
+                { title: 'Understanding Poker Hand Rankings', url: 'https://www.gambling.com/strategy/online-poker/hand-rankings', image: 'https://objects.kaxmedia.com/genesis/pocket-pairs.jpg', author: 'Jonathan Raab', authorImg: 'https://objects.kaxmedia.com/auto/o/158539/cb52832ec9.png', excerpt: 'From high card to royal flush — learn every poker hand ranking and their relative strength.', readTime: '3 min read', timeAgo: '2 weeks ago', region: 'UK' },
             ],
         };
 
-        /* ── NewsFeatured ── */
-        const NewsFeatured = {
-            props: { article: { type: Object, required: true }, badgeText: { type: String, default: 'TRENDING' }, badgeColor: { type: String, default: 'gdc-red' } },
+        /* ── Featured Card ── */
+        const FeaturedCard = {
+            props: { article: { type: Object, required: true } },
             template: `
             <a :href="article.url" class="block no-underline text-inherit hover:no-underline group">
                 <div class="bg-white rounded-xl border border-[#ECECEF] overflow-hidden">
-                    <div class="grid grid-cols-[1fr_1fr] max-md:grid-cols-1">
-                        <div class="relative h-[280px] max-md:h-[200px] overflow-hidden">
+                    <div class="grid grid-cols-[1.1fr_1fr] max-md:grid-cols-1">
+                        <div class="relative h-[300px] max-md:h-[220px] overflow-hidden">
                             <div class="w-full h-full bg-cover bg-center transition-transform duration-300 group-hover:scale-105" :style="{ backgroundImage: 'url(' + article.image + ')' }"></div>
-                        </div>
-                        <div class="p-6 flex flex-col justify-center relative">
-                            <span class="absolute top-4 right-4 bg-gdc-red text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                            <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-black text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
                                 <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                                {{ badgeText }}
+                                Feature
                             </span>
-                            <div class="flex items-center gap-2 mb-3">
-                                <img :src="article.authorImg" :alt="article.author" class="w-8 h-8 rounded-full object-cover">
-                                <div><span class="text-sm font-semibold text-gdc-blue">{{ article.author }}</span><span class="text-xs text-gdc-deep-grey ml-1">{{ article.timeAgo }}</span></div>
+                        </div>
+                        <div class="p-6 max-md:p-5 flex flex-col justify-center">
+                            <div class="flex items-center gap-2.5 mb-3">
+                                <img :src="article.authorImg" :alt="article.author" class="w-9 h-9 rounded-full object-cover">
+                                <span class="text-sm font-semibold text-gdc-blue">{{ article.author }}</span>
+                                <span class="text-sm text-gdc-deep-grey">{{ article.readTime }}</span>
                             </div>
-                            <h3 class="text-xl font-bold leading-7 text-black mb-2 group-hover:text-gdc-blue transition-colors">{{ article.title }}</h3>
-                            <p class="text-sm text-gdc-deep-grey leading-relaxed line-clamp-3">{{ article.excerpt }}</p>
+                            <h2 class="text-[22px] font-bold leading-8 text-black mb-3 group-hover:text-gdc-blue transition-colors">{{ article.title }}</h2>
+                            <p class="text-[15px] text-gdc-deep-grey leading-relaxed mb-4 line-clamp-3">{{ article.excerpt }}</p>
+                            <div class="flex items-center gap-2 text-sm text-gdc-deep-grey">
+                                <span>{{ article.timeAgo }}</span>
+                                <span class="w-1 h-1 rounded-full bg-gdc-deep-grey"></span>
+                                <img src="https://objects.kaxmedia.com/auto/o/31168/01797ff082.svg" alt="UK" class="w-5 h-5 rounded-full object-cover">
+                                <span>{{ article.region }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </a>`,
         };
 
-        /* ── NewsCard ── */
-        const NewsCard = {
+        /* ── Article Card ── */
+        const ArticleCard = {
             props: { article: { type: Object, required: true } },
             template: `
             <a :href="article.url" class="block no-underline text-inherit hover:no-underline group">
                 <div class="bg-white rounded-xl border border-[#ECECEF] overflow-hidden h-full flex flex-col transition-shadow duration-200 group-hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
-                    <div class="relative h-[180px] overflow-hidden">
+                    <div class="relative h-[190px] overflow-hidden">
                         <div class="w-full h-full bg-cover bg-center transition-transform duration-300 group-hover:scale-105" :style="{ backgroundImage: 'url(' + article.image + ')' }"></div>
-                        <span v-if="article.category" class="absolute bottom-3 left-3 bg-gdc-deep-blue-navy text-white text-xs font-bold px-2.5 py-1 rounded">{{ article.category }}</span>
                     </div>
-                    <div class="p-4 flex flex-col gap-2 flex-1">
-                        <div class="flex items-center gap-2">
-                            <img :src="article.authorImg" :alt="article.author" class="w-7 h-7 rounded-full object-cover shrink-0">
-                            <span class="text-sm font-semibold text-gdc-blue">{{ article.author }}</span>
-                            <span class="text-xs text-gdc-deep-grey">{{ article.timeAgo }}</span>
+                    <div class="p-4 flex flex-col gap-2.5 flex-1">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <img :src="article.authorImg" :alt="article.author" class="w-8 h-8 rounded-full object-cover shrink-0">
+                                <span class="text-sm font-semibold text-gdc-blue">{{ article.author }}</span>
+                            </div>
+                            <span class="text-sm text-gdc-deep-grey whitespace-nowrap">{{ article.readTime }}</span>
                         </div>
-                        <h3 class="text-base font-bold leading-snug text-black group-hover:text-gdc-blue transition-colors line-clamp-2 m-0">{{ article.title }}</h3>
-                        <p class="text-sm text-gdc-deep-grey leading-relaxed line-clamp-2 mt-auto">{{ article.excerpt }}</p>
+                        <h3 class="text-[17px] font-bold leading-snug text-black group-hover:text-gdc-blue transition-colors line-clamp-2 m-0">{{ article.title }}</h3>
+                        <p class="text-sm text-gdc-deep-grey leading-relaxed line-clamp-2">{{ article.excerpt }}</p>
+                        <div class="flex items-center gap-2 text-[13px] text-gdc-deep-grey mt-auto pt-1">
+                            <span>{{ article.timeAgo }}</span>
+                            <span class="w-1 h-1 rounded-full bg-gdc-deep-grey"></span>
+                            <img src="https://objects.kaxmedia.com/auto/o/31168/01797ff082.svg" alt="UK" class="w-4 h-4 rounded-full object-cover">
+                            <span>{{ article.region }}</span>
+                        </div>
                     </div>
                 </div>
             </a>`,
-        };
-
-        /* ── NewsSidebar ── */
-        const NewsSidebar = {
-            props: { strategyArticles: { type: Array, required: true }, guideArticles: { type: Array, required: true } },
-            data() { return { activeTab: 'popular' }; },
-            computed: {
-                displayedArticles() {
-                    if (this.activeTab === 'popular') return this.strategyArticles.slice(0, 5);
-                    return [...this.guideArticles.slice(0, 3), ...this.strategyArticles.slice(3, 5)];
-                },
-            },
-            template: `
-            <div class="sticky top-20 bg-white rounded-xl border border-[#ECECEF] overflow-hidden">
-                <div class="flex border-b border-[#ECECEF]">
-                    <button @click="activeTab = 'popular'" :class="['flex-1 flex items-center justify-center gap-1.5 py-3 text-sm font-bold transition-colors cursor-pointer border-none', activeTab === 'popular' ? 'bg-gdc-black text-white' : 'bg-white text-gdc-deep-grey hover:bg-gray-50']">
-                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                        Most Popular
-                    </button>
-                    <button @click="activeTab = 'latest'" :class="['flex-1 flex items-center justify-center gap-1.5 py-3 text-sm font-bold transition-colors cursor-pointer border-none', activeTab === 'latest' ? 'bg-gdc-black text-white' : 'bg-white text-gdc-deep-grey hover:bg-gray-50']">
-                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                        Latest
-                    </button>
-                </div>
-                <div class="divide-y divide-[#ECECEF]">
-                    <a v-for="(article, idx) in displayedArticles" :key="article.url + activeTab" :href="article.url" class="flex items-start gap-3 p-4 no-underline text-inherit hover:no-underline hover:bg-gray-50 transition-colors group">
-                        <span class="shrink-0 w-7 h-7 rounded-full bg-gdc-blue text-white text-sm font-bold flex items-center justify-center">{{ idx + 1 }}</span>
-                        <div class="flex-1 min-w-0">
-                            <h4 class="text-sm font-semibold leading-snug text-black group-hover:text-gdc-blue transition-colors line-clamp-2 m-0">{{ article.title }}</h4>
-                            <span v-if="article.category" class="inline-block mt-1.5 text-xs font-bold text-gdc-blue border border-gdc-blue rounded px-2 py-0.5">{{ article.category }}</span>
-                        </div>
-                    </a>
-                </div>
-            </div>`,
         };
 
         /* ── SiteHeader ── */
         const SiteHeader = {
             template: `
             <header class="bg-white shadow-[0px_1px_5px_-2px_#4e4e4e] sticky top-0 z-[100]">
-                <div class="max-w-[1140px] mx-auto px-6 flex items-center justify-between h-14">
-                    <a href="https://www.gambling.com" class="flex items-center shrink-0 no-underline" aria-label="Gambling.com home">
-                        <img src="https://objects.kaxmedia.com/auto/o/105557/8fbf0fa9e7.svg" alt="gambling.com" width="124" height="42" class="h-[42px] w-auto">
-                    </a>
+                <div class="max-w-[1200px] mx-auto px-6 flex items-center justify-between h-14">
+                    <a href="https://www.gambling.com" class="flex items-center shrink-0 no-underline" aria-label="Gambling.com home"><img src="https://objects.kaxmedia.com/auto/o/105557/8fbf0fa9e7.svg" alt="gambling.com" width="124" height="42" class="h-[42px] w-auto"></a>
                     <nav class="hidden lg:flex items-center gap-0" aria-label="Primary navigation">
-                        <a v-for="item in navItems" :key="item.href" :href="item.href" :aria-current="item.current ? 'page' : undefined" class="text-base font-medium text-black no-underline pl-4 whitespace-nowrap leading-[56px] h-14 flex items-center transition-colors duration-200 hover:text-[#0157FF] hover:no-underline">{{ item.label }}</a>
+                        <a v-for="item in navItems" :key="item.href" :href="item.href" class="text-base font-medium text-black no-underline pl-4 whitespace-nowrap leading-[56px] h-14 flex items-center transition-colors duration-200 hover:text-[#0157FF] hover:no-underline">{{ item.label }}</a>
                     </nav>
                     <div class="flex items-center gap-3">
-                        <a href="https://www.gambling.com/sign-up" class="inline-flex items-center gap-1.5 text-base font-medium text-black no-underline whitespace-nowrap cursor-pointer hover:underline" aria-label="Sign up">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="shrink-0"><path fill-rule="evenodd" clip-rule="evenodd" d="M20.2282 20.7349C22.5503 18.5466 24 15.4426 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 15.4426 1.44967 18.5466 3.77185 20.7349C5.92015 22.7593 8.81518 24 12 24C15.1848 24 18.0799 22.7593 20.2282 20.7349ZM4.794 19.1536C6.48568 17.0434 9.08505 15.6923 12 15.6923C14.9149 15.6923 17.5143 17.0434 19.206 19.1536C17.3665 21.0065 14.8172 22.1538 12 22.1538C9.18277 22.1538 6.63351 21.0065 4.794 19.1536ZM16.6154 8.30769C16.6154 10.8567 14.549 12.9231 12 12.9231C9.45099 12.9231 7.38462 10.8567 7.38462 8.30769C7.38462 5.75869 9.45099 3.69231 12 3.69231C14.549 3.69231 16.6154 5.75869 16.6154 8.30769Z" fill="black"/></svg>
-                            Sign&nbsp;Up
-                        </a>
-                        <div class="inline-flex items-center cursor-pointer no-underline hover:opacity-70" aria-label="Select region" role="button" tabindex="0">
-                            <div class="w-[30px] h-[54px] shrink-0 bg-center bg-no-repeat" style="background-image: url('https://objects.kaxmedia.com/auto/o/263246/a8d6548e5d.svg'); background-size: 26px;"></div>
-                            <div class="flex items-center gap-2 text-base font-medium text-black whitespace-nowrap">GX<svg xmlns="http://www.w3.org/2000/svg" width="17" height="10" viewBox="0 0 17 10" fill="none" class="shrink-0"><path d="M16 1L8.5 8.5L0.999999 1" stroke="black" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                        </div>
-                        <button class="bg-transparent border-none cursor-pointer p-0 text-black flex items-center" aria-label="Search">
-                            <img src="https://objects.kaxmedia.com/auto/o/139752/7900ca8f22.svg" alt="" width="20" height="25" class="w-5 h-[25px]">
-                        </button>
+                        <a href="https://www.gambling.com/sign-up" class="inline-flex items-center gap-1.5 text-base font-medium text-black no-underline whitespace-nowrap cursor-pointer hover:underline" aria-label="Sign up"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" class="shrink-0"><path fill-rule="evenodd" clip-rule="evenodd" d="M20.2282 20.7349C22.5503 18.5466 24 15.4426 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 15.4426 1.44967 18.5466 3.77185 20.7349C5.92015 22.7593 8.81518 24 12 24C15.1848 24 18.0799 22.7593 20.2282 20.7349ZM4.794 19.1536C6.48568 17.0434 9.08505 15.6923 12 15.6923C14.9149 15.6923 17.5143 17.0434 19.206 19.1536C17.3665 21.0065 14.8172 22.1538 12 22.1538C9.18277 22.1538 6.63351 21.0065 4.794 19.1536ZM16.6154 8.30769C16.6154 10.8567 14.549 12.9231 12 12.9231C9.45099 12.9231 7.38462 10.8567 7.38462 8.30769C7.38462 5.75869 9.45099 3.69231 12 3.69231C14.549 3.69231 16.6154 5.75869 16.6154 8.30769Z" fill="black"/></svg>Sign&nbsp;Up</a>
+                        <div class="inline-flex items-center cursor-pointer no-underline hover:opacity-70" aria-label="Select region" role="button" tabindex="0"><div class="w-[30px] h-[54px] shrink-0 bg-center bg-no-repeat" style="background-image: url('https://objects.kaxmedia.com/auto/o/263246/a8d6548e5d.svg'); background-size: 26px;"></div><div class="flex items-center gap-2 text-base font-medium text-black whitespace-nowrap">GX<svg xmlns="http://www.w3.org/2000/svg" width="17" height="10" viewBox="0 0 17 10" fill="none" class="shrink-0"><path d="M16 1L8.5 8.5L0.999999 1" stroke="black" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+                        <button class="bg-transparent border-none cursor-pointer p-0 text-black flex items-center" aria-label="Search"><img src="https://objects.kaxmedia.com/auto/o/139752/7900ca8f22.svg" alt="" width="20" height="25" class="w-5 h-[25px]"></button>
                     </div>
                 </div>
             </header>`,
-            data() { return { navItems: [
-                { label: 'Reviews', href: 'https://www.gambling.com/reviews', current: false },
-                { label: 'Casino', href: 'https://www.gambling.com/online-casinos', current: false },
-                { label: 'Betting', href: 'https://www.gambling.com/online-betting', current: false },
-                { label: 'Free Games', href: 'https://www.gambling.com/free-games', current: false },
-                { label: 'Guides', href: 'https://www.gambling.com/guides', current: true },
-                { label: 'News', href: 'https://www.gambling.com/news', current: false },
-                { label: 'Inside Gambling.com', href: 'https://www.gambling.com/inside', current: false },
-            ]}; },
+            data() { return { navItems: [{label:'Reviews',href:'https://www.gambling.com/reviews'},{label:'Casino',href:'https://www.gambling.com/online-casinos'},{label:'Betting',href:'https://www.gambling.com/online-betting'},{label:'Free Games',href:'https://www.gambling.com/free-games'},{label:'Guides',href:'https://www.gambling.com/guides',current:true},{label:'News',href:'https://www.gambling.com/news'},{label:'Inside Gambling.com',href:'https://www.gambling.com/inside'}]}; },
         };
 
-        /* ── RewardsBanner ── */
-        const RewardsBanner = {
-            data() { return { isLoggedIn: false }; },
-            template: `
-            <section class="py-6">
-                <div class="max-w-[1140px] mx-auto px-6">
-                    <div v-if="!isLoggedIn" class="relative rounded-[20px] overflow-hidden h-[272px] max-md:h-[320px]">
-                        <img src="assets/rewards-bg-dark.png" alt="" class="absolute inset-0 w-full h-full object-cover">
-                        <img src="assets/cosmo-mascot.png" alt="" class="absolute right-[15%] max-md:right-[2%] top-[-20px] h-[304px] max-md:h-[240px] w-auto pointer-events-none">
-                        <img src="assets/chip-large.png" alt="" class="absolute right-[5%] max-md:right-[-2%] top-[60px] max-md:top-[40px] w-[100px] max-md:w-[70px] h-auto pointer-events-none">
-                        <img src="assets/chip-small.png" alt="" class="absolute left-[38%] max-md:left-[60%] top-[-10px] w-[70px] max-md:w-[50px] h-auto pointer-events-none" style="transform: rotate(-43deg);">
-                        <div class="relative z-10 flex flex-col items-start justify-center h-full pl-6 max-w-[550px] max-md:max-w-[220px] max-md:pt-4">
-                            <div class="flex items-center gap-2 mb-3">
-                                <img src="assets/gdc-logo-white.png" alt="gambling.com" class="h-[60px] max-md:h-[44px] w-auto">
-                                <span class="text-white text-[37px] max-md:text-[25px] font-normal" style="text-shadow: 0px 4px 24px black;">Rewards</span>
-                            </div>
-                            <p class="text-white text-[22px] max-md:text-[18px] font-semibold leading-8 max-md:leading-6 mb-4" style="text-shadow: 0px 4px 24px black;">Register with us, earn chips, get FREE stuff.</p>
-                            <a href="https://www.gambling.com/rewards" class="bg-white border border-black text-black text-base font-semibold capitalize text-center py-3 px-16 max-md:px-10 rounded no-underline hover:no-underline hover:bg-gray-100 transition-colors">Register Now</a>
-                            <p class="text-white text-sm mt-2" style="text-shadow: 0px 4px 24px black;">Already registered. <a href="https://www.gambling.com/login" class="text-white font-bold underline hover:text-white">Log in</a></p>
-                        </div>
-                    </div>
-                </div>
-            </section>`,
-        };
+        const RewardsBanner = { data() { return { isLoggedIn: false }; }, template: `<section class="py-6"><div class="max-w-[1200px] mx-auto px-6"><div v-if="!isLoggedIn" class="relative rounded-[20px] overflow-hidden h-[272px] max-md:h-[320px]"><img src="assets/rewards-bg-dark.png" alt="" class="absolute inset-0 w-full h-full object-cover"><img src="assets/cosmo-mascot.png" alt="" class="absolute right-[15%] max-md:right-[2%] top-[-20px] h-[304px] max-md:h-[240px] w-auto pointer-events-none"><img src="assets/chip-large.png" alt="" class="absolute right-[5%] max-md:right-[-2%] top-[60px] max-md:top-[40px] w-[100px] max-md:w-[70px] h-auto pointer-events-none"><img src="assets/chip-small.png" alt="" class="absolute left-[38%] max-md:left-[60%] top-[-10px] w-[70px] max-md:w-[50px] h-auto pointer-events-none" style="transform: rotate(-43deg);"><div class="relative z-10 flex flex-col items-start justify-center h-full pl-6 max-w-[550px] max-md:max-w-[220px] max-md:pt-4"><div class="flex items-center gap-2 mb-3"><img src="assets/gdc-logo-white.png" alt="gambling.com" class="h-[60px] max-md:h-[44px] w-auto"><span class="text-white text-[37px] max-md:text-[25px] font-normal" style="text-shadow: 0px 4px 24px black;">Rewards</span></div><p class="text-white text-[22px] max-md:text-[18px] font-semibold leading-8 max-md:leading-6 mb-4" style="text-shadow: 0px 4px 24px black;">Register with us, earn chips, get FREE stuff.</p><a href="https://www.gambling.com/rewards" class="bg-white border border-black text-black text-base font-semibold capitalize text-center py-3 px-16 max-md:px-10 rounded no-underline hover:no-underline hover:bg-gray-100 transition-colors">Register Now</a><p class="text-white text-sm mt-2" style="text-shadow: 0px 4px 24px black;">Already registered. <a href="https://www.gambling.com/login" class="text-white font-bold underline hover:text-white">Log in</a></p></div></div></div></section>` };
 
-        /* ── SiteFooter ── */
-        const SiteFooter = {
-            data() { return {
-                footerColumns: [
-                    { title: 'Popular Pages', links: [{ label: 'Online Casinos', href: 'https://www.gambling.com/online-casinos' },{ label: 'Online Betting', href: 'https://www.gambling.com/online-betting' },{ label: 'Online Slots', href: 'https://www.gambling.com/online-casinos/slots' },{ label: 'Poker Sites', href: 'https://www.gambling.com/poker' },{ label: 'Reviews', href: 'https://www.gambling.com/reviews' },{ label: 'Free Games', href: 'https://www.gambling.com/free-games' }]},
-                    { title: 'Quick Links', links: [{ label: 'Casino Bonuses', href: 'https://www.gambling.com/online-casinos/bonuses' },{ label: 'Online Blackjack', href: 'https://www.gambling.com/online-casinos/blackjack' },{ label: 'Online Roulette', href: 'https://www.gambling.com/online-casinos/roulette' },{ label: 'Guides', href: 'https://www.gambling.com/guides' },{ label: 'News', href: 'https://www.gambling.com/news' }]},
-                    { title: 'Support', links: [{ label: 'About Us', href: 'https://www.gambling.com/about-us' },{ label: 'Authors', href: 'https://www.gambling.com/authors' },{ label: 'Editorial Guidelines', href: 'https://www.gambling.com/editorial-guidelines' },{ label: 'Contact Us', href: 'https://www.gambling.com/contact' },{ label: 'Responsible Gambling', href: 'https://www.gambling.com/responsible-gambling' }]},
-                ],
-                socialLinks: [
-                    { href: 'https://x.com/gamblingcom', icon: 'https://objects.kaxmedia.com/auto/o/163105/6d2bef2635.svg', alt: 'X', label: 'Gambling.com on X' },
-                    { href: 'https://www.youtube.com/@GamblingComGroup', icon: 'https://objects.kaxmedia.com/auto/o/207713/dd9365d09a.svg', alt: 'YouTube', label: 'Gambling.com on YouTube' },
-                    { href: 'https://www.facebook.com/gamblingcom', icon: 'https://objects.kaxmedia.com/auto/o/163103/abf741e7a2.svg', alt: 'Facebook', label: 'Gambling.com on Facebook' },
-                ],
-                badges: [
-                    { src: 'https://objects.kaxmedia.com/auto/o/163122/a668aabbbd.svg', alt: 'GAMB | Nasdaq Listed', height: 40 },
-                    { src: 'https://objects.kaxmedia.com/auto/o/163119/d9f4d5eb90.svg', alt: 'GamStop', height: 48 },
-                    { src: 'https://objects.kaxmedia.com/auto/o/163118/df5e1b2ddd.svg', alt: 'GamCare', height: 51 },
-                    { src: 'https://objects.kaxmedia.com/auto/o/209377/e0932ff1ed.svg', alt: 'GambleAware', height: 21 },
-                    { src: 'https://objects.kaxmedia.com/auto/o/163106/6830429ae0.svg', alt: '18+', height: 51 },
-                ],
-            }; },
-            template: `
-            <footer class="bg-white text-black border-t border-[#d8d8d8]">
-                <div class="py-[30px] border-b border-[#d8d8d8]">
-                    <div class="max-w-[1140px] mx-auto px-6 flex flex-wrap">
-                        <div v-for="col in footerColumns" :key="col.title" class="w-1/3 px-4 max-lg:w-1/2 max-md:w-full max-md:pb-6">
-                            <h5 class="text-lg font-semibold text-black bg-[#f7f7f7] rounded-[10px] p-2.5 mb-4">{{ col.title }}</h5>
-                            <ul class="flex flex-col gap-0"><li v-for="link in col.links" :key="link.href" class="pb-2.5"><a :href="link.href" class="text-[13px] font-normal text-[#0157FF] no-underline leading-5 transition-colors duration-200 hover:text-[#003EE6] hover:underline">{{ link.label }}</a></li></ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="pt-[30px]">
-                    <div class="max-w-[1140px] mx-auto px-6 flex flex-wrap items-start">
-                        <div class="flex flex-wrap gap-2.5 w-[28%] pr-4 max-lg:w-full max-lg:mb-6">
-                            <a v-for="social in socialLinks" :key="social.href" :href="social.href" class="inline-flex items-center justify-center w-8 h-8 no-underline transition-opacity duration-200 rounded overflow-hidden hover:opacity-70 hover:no-underline" :aria-label="social.label"><img :src="social.icon" :alt="social.alt" width="32" height="32" class="w-8 h-8 block"></a>
-                        </div>
-                        <div class="flex-1 text-base font-normal text-[#999] leading-6">
-                            <p class="mb-3">DISCLAIMER: Online Wagering is illegal in some Jurisdictions. It is your responsibility to check your local regulations before playing online.</p>
-                            <p class="mb-3">&copy; 2011-2026 GDC Media Limited. All Rights Reserved.</p>
-                            <p>Gambling can be addictive. Please play Responsibly.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="py-5 pb-[30px]">
-                    <div class="max-w-[1140px] mx-auto px-6 flex flex-wrap justify-center items-center gap-6">
-                        <img v-for="badge in badges" :key="badge.src" :src="badge.src" :alt="badge.alt" class="w-auto" :style="{ height: badge.height + 'px' }">
-                    </div>
-                </div>
-            </footer>`,
-        };
+        const SiteFooter = { data() { return { footerColumns: [{title:'Popular Pages',links:[{label:'Online Casinos',href:'https://www.gambling.com/online-casinos'},{label:'Online Betting',href:'https://www.gambling.com/online-betting'},{label:'Online Slots',href:'https://www.gambling.com/online-casinos/slots'},{label:'Poker Sites',href:'https://www.gambling.com/poker'},{label:'Reviews',href:'https://www.gambling.com/reviews'},{label:'Free Games',href:'https://www.gambling.com/free-games'}]},{title:'Quick Links',links:[{label:'Casino Bonuses',href:'https://www.gambling.com/online-casinos/bonuses'},{label:'Online Blackjack',href:'https://www.gambling.com/online-casinos/blackjack'},{label:'Guides',href:'https://www.gambling.com/guides'},{label:'News',href:'https://www.gambling.com/news'}]},{title:'Support',links:[{label:'About Us',href:'https://www.gambling.com/about-us'},{label:'Authors',href:'https://www.gambling.com/authors'},{label:'Contact Us',href:'https://www.gambling.com/contact'},{label:'Responsible Gambling',href:'https://www.gambling.com/responsible-gambling'}]}], socialLinks:[{href:'https://x.com/gamblingcom',icon:'https://objects.kaxmedia.com/auto/o/163105/6d2bef2635.svg',alt:'X',label:'X'},{href:'https://www.youtube.com/@GamblingComGroup',icon:'https://objects.kaxmedia.com/auto/o/207713/dd9365d09a.svg',alt:'YouTube',label:'YouTube'},{href:'https://www.facebook.com/gamblingcom',icon:'https://objects.kaxmedia.com/auto/o/163103/abf741e7a2.svg',alt:'Facebook',label:'Facebook'}], badges:[{src:'https://objects.kaxmedia.com/auto/o/163122/a668aabbbd.svg',alt:'GAMB',height:40},{src:'https://objects.kaxmedia.com/auto/o/163119/d9f4d5eb90.svg',alt:'GamStop',height:48},{src:'https://objects.kaxmedia.com/auto/o/163118/df5e1b2ddd.svg',alt:'GamCare',height:51},{src:'https://objects.kaxmedia.com/auto/o/209377/e0932ff1ed.svg',alt:'GambleAware',height:21},{src:'https://objects.kaxmedia.com/auto/o/163106/6830429ae0.svg',alt:'18+',height:51}] }; }, template: `<footer class="bg-white text-black border-t border-[#d8d8d8]"><div class="py-[30px] border-b border-[#d8d8d8]"><div class="max-w-[1200px] mx-auto px-6 flex flex-wrap"><div v-for="col in footerColumns" :key="col.title" class="w-1/3 px-4 max-lg:w-1/2 max-md:w-full max-md:pb-6"><h5 class="text-lg font-semibold text-black bg-[#f7f7f7] rounded-[10px] p-2.5 mb-4">{{ col.title }}</h5><ul class="flex flex-col gap-0"><li v-for="link in col.links" :key="link.href" class="pb-2.5"><a :href="link.href" class="text-[13px] font-normal text-[#0157FF] no-underline leading-5 hover:text-[#003EE6] hover:underline">{{ link.label }}</a></li></ul></div></div></div><div class="pt-[30px]"><div class="max-w-[1200px] mx-auto px-6 flex flex-wrap items-start"><div class="flex flex-wrap gap-2.5 w-[28%] pr-4 max-lg:w-full max-lg:mb-6"><a v-for="social in socialLinks" :key="social.href" :href="social.href" class="inline-flex items-center justify-center w-8 h-8 no-underline transition-opacity duration-200 rounded overflow-hidden hover:opacity-70 hover:no-underline" :aria-label="social.label"><img :src="social.icon" :alt="social.alt" width="32" height="32" class="w-8 h-8 block"></a></div><div class="flex-1 text-base font-normal text-[#999] leading-6"><p class="mb-3">DISCLAIMER: Online Wagering is illegal in some Jurisdictions. It is your responsibility to check your local regulations before playing online.</p><p class="mb-3">&copy; 2011-2026 GDC Media Limited. All Rights Reserved.</p><p>Gambling can be addictive. Please play Responsibly.</p></div></div></div><div class="py-5 pb-[30px]"><div class="max-w-[1200px] mx-auto px-6 flex flex-wrap justify-center items-center gap-6"><img v-for="badge in badges" :key="badge.src" :src="badge.src" :alt="badge.alt" class="w-auto" :style="{ height: badge.height + 'px' }"></div></div></footer>` };
 
         const app = createApp({ data() { return { pageData }; } });
         app.component('site-header', SiteHeader);
         app.component('site-footer', SiteFooter);
-        app.component('news-featured', NewsFeatured);
-        app.component('news-card', NewsCard);
-        app.component('news-sidebar', NewsSidebar);
+        app.component('featured-card', FeaturedCard);
+        app.component('article-card', ArticleCard);
         app.component('rewards-banner', RewardsBanner);
         app.mount('#app');
     </script>
