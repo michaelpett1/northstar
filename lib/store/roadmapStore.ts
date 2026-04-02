@@ -23,8 +23,8 @@ const P_RANK: Record<Priority, number> = { p0: 0, p1: 1, p2: 2, p3: 3 };
 
 // Sprints: 2-week sprints starting 2026-01-01. Generate 26 sprints (full year).
 export function generateSprints(count = 26) {
-  // Sprint 6 is current (contains Apr 2 2026), Sprint 7 starts Apr 9
-  const base = new Date('2026-01-15');
+  // Sprint 7 is current (starts Apr 2 2026)
+  const base = new Date('2026-01-08');
   return Array.from({ length: count }, (_, i) => {
     const start = new Date(base);
     start.setDate(base.getDate() + i * 14);
