@@ -120,6 +120,19 @@ export const useRoadmapStore = create<RoadmapState>()(
         if (prevWsId !== wsId) {
           set({ _loadedWorkspaceId: wsId });
         }
+
+        // Normalise any legacy boolean priorities in persisted local data
+        const localTasks = get().tasks;
+        const needsFix = localTasks.some(t => typeof t.priority === 'boolean' || !['p0','p1','p2','p3'].includes(t.priority));
+        if (needsFix) {
+          set({ tasks: localTasks.map(t => ({
+            ...t,
+            priority: typeof t.priority === 'boolean'
+              ? (t.priority ? 'p0' as Priority : 'p2' as Priority)
+              : (['p0','p1','p2','p3'].includes(t.priority) ? t.priority : 'p2' as Priority),
+          }))});
+        }
+
         if (!hasSupabase) return;
         try {
           const [tasks, caps, projects] = await Promise.all([
@@ -127,7 +140,15 @@ export const useRoadmapStore = create<RoadmapState>()(
             fetchSprintCapacities(workspaceId),
             fetchRoadmapProjects(workspaceId),
           ]);
-          if (tasks.length > 0) set({ tasks });
+          if (tasks.length > 0) {
+            // Normalise priorities from Supabase (may still have boolean values)
+            set({ tasks: tasks.map(t => ({
+              ...t,
+              priority: typeof t.priority === 'boolean'
+                ? (t.priority ? 'p0' as Priority : 'p2' as Priority)
+                : (['p0','p1','p2','p3'].includes(t.priority) ? t.priority : 'p2' as Priority),
+            }))});
+          }
           if (Object.keys(caps).length > 0) set({ sprintCapacities: caps });
           if (projects.length > 0) set({ projects });
         } catch (err) {

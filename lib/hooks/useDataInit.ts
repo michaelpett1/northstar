@@ -54,9 +54,16 @@ function seedGDCOnce() {
     useOKRsStore.setState({ objectives: OBJECTIVES });
   }
 
-  // Seed visual roadmap
+  // Seed visual roadmap (normalise any legacy boolean priorities)
   if (useRoadmapStore.getState().tasks.length === 0) {
-    useRoadmapStore.setState({ tasks: GDC_SEED_ROADMAP_TASKS });
+    useRoadmapStore.setState({
+      tasks: GDC_SEED_ROADMAP_TASKS.map(t => ({
+        ...t,
+        priority: typeof t.priority === 'boolean'
+          ? (t.priority ? 'p0' : 'p2')
+          : (t.priority ?? 'p2'),
+      })) as typeof GDC_SEED_ROADMAP_TASKS,
+    });
   }
 
   // Mark as done — never re-seed
