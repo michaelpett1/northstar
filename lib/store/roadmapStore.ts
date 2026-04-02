@@ -1,7 +1,7 @@
 'use client';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { RoadmapTask } from '@/lib/types';
+import type { RoadmapTask, Priority } from '@/lib/types';
 import { GDC_SEED_ROADMAP_TASKS } from '@/lib/data/mockData';
 import {
   fetchRoadmapTasks,
@@ -18,6 +18,8 @@ const hasSupabase = !!(
   process.env.NEXT_PUBLIC_SUPABASE_URL &&
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
+
+const P_RANK: Record<Priority, number> = { p0: 0, p1: 1, p2: 2, p3: 3 };
 
 // Sprints: 2-week sprints starting 2026-01-01. Generate 26 sprints (full year).
 export function generateSprints(count = 26) {
@@ -235,8 +237,7 @@ export const useRoadmapStore = create<RoadmapState>()(
             .filter(t => t.type === type && t.startSprint === sprintNumber && t.startSprint !== 0)
             .sort((a, b) => {
               // Priority tasks stay, non-priority move first
-              if (a.priority && !b.priority) return -1;
-              if (!a.priority && b.priority) return 1;
+              if (P_RANK[a.priority] !== P_RANK[b.priority]) return P_RANK[a.priority] - P_RANK[b.priority];
               // Newer tasks move first
               return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
             });
@@ -274,8 +275,7 @@ export const useRoadmapStore = create<RoadmapState>()(
                   const tasksHere = cascadeTasks
                     .filter(t => t.type === type && t.startSprint === cascadeSprint && t.startSprint !== 0)
                     .sort((a, b) => {
-                      if (a.priority && !b.priority) return -1;
-                      if (!a.priority && b.priority) return 1;
+                      if (P_RANK[a.priority] !== P_RANK[b.priority]) return P_RANK[a.priority] - P_RANK[b.priority];
                       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
                     });
                   const ov = tasksHere.length - cap[type];
@@ -310,9 +310,8 @@ export const useRoadmapStore = create<RoadmapState>()(
                 const pullCandidates = newTasks
                   .filter(t => t.type === type && t.startSprint === nextSprint && t.startSprint !== 0)
                   .sort((a, b) => {
-                    // Pull priority tasks first
-                    if (a.priority && !b.priority) return -1;
-                    if (!a.priority && b.priority) return 1;
+                    // Pull higher priority tasks first
+                    if (P_RANK[a.priority] !== P_RANK[b.priority]) return P_RANK[a.priority] - P_RANK[b.priority];
                     // Older tasks first
                     return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
                   });

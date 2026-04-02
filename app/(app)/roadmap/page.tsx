@@ -7,7 +7,7 @@ import { useRoadmapStore, generateSprints, getCurrentSprintNumber } from '@/lib/
 import { useProjectsStore } from '@/lib/store/projectsStore';
 import type { SprintCapacity } from '@/lib/store/roadmapStore';
 import { useSettingsStore } from '@/lib/store/settingsStore';
-import type { RoadmapTask, TimelineItem } from '@/lib/types';
+import type { RoadmapTask, TimelineItem, Priority } from '@/lib/types';
 import ProductTour from '@/components/ui/ProductTour';
 import { ROADMAP_TOUR } from '@/lib/data/tourSteps';
 
@@ -17,6 +17,14 @@ const DEV_COLOR = '#C084AC';
 function typeColor(type: 'ux' | 'dev') {
   return type === 'ux' ? UX_COLOR : DEV_COLOR;
 }
+
+const PRIORITY_RANK: Record<Priority, number> = { p0: 0, p1: 1, p2: 2, p3: 3 };
+const PRIORITY_COLORS: Record<Priority, { bg: string; text: string }> = {
+  p0: { bg: '#FEE2E2', text: '#DC2626' },
+  p1: { bg: '#FEF3C7', text: '#D97706' },
+  p2: { bg: '#DBEAFE', text: '#2563EB' },
+  p3: { bg: '#F3F4F6', text: '#6B7280' },
+};
 
 const SPRINTS = generateSprints(26);
 
@@ -44,7 +52,7 @@ interface AddTaskForm {
   project: string;
   jiraUrl: string;
   assigneeId: string;
-  priority: boolean;
+  priority: Priority;
 }
 
 function defaultForm(overrides?: Partial<AddTaskForm>): AddTaskForm {
@@ -57,7 +65,7 @@ function defaultForm(overrides?: Partial<AddTaskForm>): AddTaskForm {
     project: '',
     jiraUrl: '',
     assigneeId: '',
-    priority: false,
+    priority: 'p2',
     ...overrides,
   };
 }
@@ -175,9 +183,19 @@ function TaskCard({
         >
           {task.type === 'ux' ? 'UX' : 'DEV'}
         </span>
-        {task.priority && (
-          <span style={{ fontSize: 12 }} title="Priority">🔥</span>
-        )}
+        <span
+          style={{
+            fontSize: 9,
+            fontWeight: 700,
+            color: PRIORITY_COLORS[task.priority].text,
+            background: PRIORITY_COLORS[task.priority].bg,
+            borderRadius: 3,
+            padding: '1px 5px',
+            letterSpacing: '0.04em',
+          }}
+        >
+          {task.priority.toUpperCase()}
+        </span>
       </div>
 
       {/* Title */}
@@ -416,10 +434,8 @@ function SprintDropZone({
                 // Dev first, then UX
                 if (a.type === 'dev' && b.type !== 'dev') return -1;
                 if (a.type !== 'dev' && b.type === 'dev') return 1;
-                // Within same type, priority first
-                if (a.priority && !b.priority) return -1;
-                if (!a.priority && b.priority) return 1;
-                return 0;
+                // Within same type, sort by priority rank (p0 first)
+                return PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority];
               }).map(task => (
                 <TaskCard key={task.id} task={task} onDragStart={onDragStart} onEdit={onEditTask} onDelete={onDeleteTask} onClone={onCloneTask} />
               ))
@@ -750,17 +766,18 @@ function AddTaskModal({
         </div>
 
         {/* Priority */}
-        <div style={{ ...fieldStyle, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <input
-            id="priority-check"
-            type="checkbox"
-            checked={form.priority}
-            onChange={e => set('priority', e.target.checked)}
-            style={{ width: 15, height: 15, cursor: 'pointer' }}
-          />
-          <label htmlFor="priority-check" style={{ ...labelStyle, marginBottom: 0, cursor: 'pointer' }}>
-            🔥 Priority
-          </label>
+        <div style={fieldStyle}>
+          <label style={labelStyle}>Priority</label>
+          <select
+            style={inputStyle}
+            value={form.priority}
+            onChange={e => set('priority', e.target.value as Priority)}
+          >
+            <option value="p0">🔥 P0 — Critical</option>
+            <option value="p1">P1 — High</option>
+            <option value="p2">P2 — Medium</option>
+            <option value="p3">P3 — Low</option>
+          </select>
         </div>
 
         {/* Actions */}
@@ -899,7 +916,7 @@ function GenerateFromTimelineModal({
         assigneeId: a.item.ownerId,
         startSprint: 0, // Goes to planning
         endSprint: 0,
-        priority: a.item.priority === 'p0' || a.item.priority === 'p1',
+        priority: a.item.priority,
         createdAt: new Date().toISOString(),
         timelineItemId: a.item.id,
       };
@@ -1461,9 +1478,7 @@ export default function RoadmapPage() {
                 {[...planningTasks].sort((a, b) => {
                   if (a.type === 'dev' && b.type !== 'dev') return -1;
                   if (a.type !== 'dev' && b.type === 'dev') return 1;
-                  if (a.priority && !b.priority) return -1;
-                  if (!a.priority && b.priority) return 1;
-                  return 0;
+                  return PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority];
                 }).map(task => (
                   <TaskCard
                     key={task.id}

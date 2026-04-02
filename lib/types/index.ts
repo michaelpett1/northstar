@@ -104,7 +104,7 @@ export interface RoadmapTask {
   assigneeId: string;
   startSprint: number;
   endSprint: number;
-  priority: boolean;
+  priority: Priority;
   createdAt: string;
   /** Links back to a TimelineItem so changes stay in sync */
   timelineItemId?: string;

@@ -132,7 +132,7 @@ export const useSuggestionsStore = create<SuggestionsState>()(
           assigneeId: newItem.ownerId,
           startSprint: 0,
           endSprint: 0,
-          priority: newItem.priority === 'p0' || newItem.priority === 'p1',
+          priority: newItem.priority,
           createdAt: now,
           timelineItemId: newItem.id,
         };

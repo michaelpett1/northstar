@@ -345,7 +345,7 @@ export async function fetchRoadmapTasks(workspaceId?: string): Promise<RoadmapTa
     assigneeId:     row.assignee_id as string,
     startSprint:    row.start_sprint as number,
     endSprint:      row.end_sprint as number,
-    priority:       row.priority as boolean,
+    priority:       row.priority as RoadmapTask['priority'],
     createdAt:      row.created_at as string,
     timelineItemId: (row.timeline_item_id as string) ?? undefined,
   }));
