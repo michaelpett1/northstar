@@ -1268,7 +1268,7 @@ function OKRDashboard({ objectives }: { objectives: Objective[] }) {
                       style={{
                         left: `${dept.avgProgress}%`,
                         top: '50%',
-                        transform: 'translate(-50%, -50%)',
+                        transform: `translate(-50%, -50%)${dept.avgProgress < 100 ? ' scaleX(-1)' : ''}`,
                         fontSize: dept.avgProgress >= 100 ? 20 : 16,
                         lineHeight: 1,
                         filter: dept.avgProgress >= 100 ? 'drop-shadow(0 0 4px gold)' : 'none',
