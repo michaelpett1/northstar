@@ -19,10 +19,8 @@ import {
   upsertRoadmapProject,
 } from '@/lib/supabase/queries';
 
-const hasSupabase = !!(
-  process.env.NEXT_PUBLIC_SUPABASE_URL &&
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+const hasSupabase = false; // TODO: restore when Supabase is configured
+// const hasSupabase = !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 const GDC_WS_ID = 'ws-gdc-product-features';
 const GDC_INITIAL_SEED_KEY = 'northstar-gdc-initial-seed-v3';

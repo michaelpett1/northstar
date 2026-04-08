@@ -14,10 +14,8 @@ import {
 } from '@/lib/supabase/queries';
 import { useActivityStore } from './activityStore';
 
-const hasSupabase = !!(
-  process.env.NEXT_PUBLIC_SUPABASE_URL &&
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+const hasSupabase = false; // TODO: restore when Supabase is configured
+// const hasSupabase = !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 interface OKRsState {
   objectives: Objective[];

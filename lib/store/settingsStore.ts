@@ -15,10 +15,8 @@ import {
 } from '@/lib/supabase/queries';
 import { TEAM_MEMBERS } from '@/lib/data/mockData';
 
-const hasSupabase = !!(
-  process.env.NEXT_PUBLIC_SUPABASE_URL &&
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+const hasSupabase = false; // TODO: restore when Supabase is configured
+// const hasSupabase = !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 const DEFAULT_DEPARTMENTS: Department[] = [
   { id: 'dept-1', name: 'GDC Product Led Growth', color: '#22C55E', password: 'PLG2026!' },

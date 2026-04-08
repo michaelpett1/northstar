@@ -18,10 +18,8 @@ import {
   patchSuggestion as dbPatchSuggestion,
 } from '@/lib/supabase/queries';
 
-const hasSupabase = !!(
-  process.env.NEXT_PUBLIC_SUPABASE_URL &&
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+const hasSupabase = false; // TODO: restore when Supabase is configured
+// const hasSupabase = !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 interface SuggestionsState {
   suggestions: RoadmapSuggestion[];

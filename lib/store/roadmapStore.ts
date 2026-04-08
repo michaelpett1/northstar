@@ -14,10 +14,8 @@ import {
   upsertRoadmapProject,
 } from '@/lib/supabase/queries';
 
-const hasSupabase = !!(
-  process.env.NEXT_PUBLIC_SUPABASE_URL &&
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+const hasSupabase = false; // TODO: restore when Supabase is configured
+// const hasSupabase = !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 const P_RANK: Record<Priority, number> = { p0: 0, p1: 1, p2: 2, p3: 3 };
 

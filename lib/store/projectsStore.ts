@@ -15,10 +15,8 @@ import {
 import { useActivityStore } from './activityStore';
 import { useRoadmapStore } from './roadmapStore';
 
-const hasSupabase = !!(
-  process.env.NEXT_PUBLIC_SUPABASE_URL &&
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+const hasSupabase = false; // TODO: restore when Supabase is configured
+// const hasSupabase = !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
 const DEFAULT_GROUPS: TimelineGroup[] = [
   { id: 'grp-1', name: 'New Features', color: '#2563EB' },
