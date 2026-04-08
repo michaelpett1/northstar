@@ -76,8 +76,9 @@ export async function GET(request: Request) {
     );
   } catch (err) {
     console.error('[api/okrs] GET failed:', err);
+    const message = err instanceof Error ? err.message : String(err);
     return NextResponse.json(
-      { ok: false, error: 'Failed to fetch OKRs' },
+      { ok: false, error: 'Failed to fetch OKRs', detail: message },
       { status: 500 }
     );
   }

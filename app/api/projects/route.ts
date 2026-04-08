@@ -101,8 +101,9 @@ export async function GET(request: Request) {
     );
   } catch (err) {
     console.error('[api/projects] GET failed:', err);
+    const message = err instanceof Error ? err.message : String(err);
     return NextResponse.json(
-      { ok: false, error: 'Failed to fetch projects' },
+      { ok: false, error: 'Failed to fetch projects', detail: message },
       { status: 500 }
     );
   }
