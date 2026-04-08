@@ -3,8 +3,9 @@
   "configurations": [
     {
       "name": "northstar",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeExecutable": "/usr/local/bin/npx",
+      "runtimeArgs": ["next", "dev"],
+      "env": { "PATH": "/usr/local/bin:/usr/bin:/bin" },
       "port": 3000,
       "autoPort": true
     },
