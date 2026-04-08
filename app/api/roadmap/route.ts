@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createAPIClient } from '@/lib/supabase/api-client';
 
 /**
  * GET /api/roadmap
@@ -14,7 +14,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const workspaceId = searchParams.get('workspace_id');
 
-    const sb = await createServerSupabaseClient();
+    const sb = createAPIClient();
 
     // Fetch roadmap tasks, team members, and sprint capacities
     let tasksQ = sb

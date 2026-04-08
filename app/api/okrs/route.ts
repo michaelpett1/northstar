@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createAPIClient } from '@/lib/supabase/api-client';
 import type { Database } from '@/lib/supabase/types';
 
 type DBObjective = Database['public']['Tables']['objectives']['Row'];
@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const workspaceId = searchParams.get('workspace_id');
 
-    const sb = await createServerSupabaseClient();
+    const sb = createAPIClient();
 
     // Fetch objectives, key results, and check-ins in parallel
     let objQ = sb.from('objectives').select('*').order('created_at');

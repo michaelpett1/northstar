@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createAPIClient } from '@/lib/supabase/api-client';
 import type { Database } from '@/lib/supabase/types';
 
 type DBTimelineItem = Database['public']['Tables']['timeline_items']['Row'];
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
     const workspaceId = searchParams.get('workspace_id');
     const status = searchParams.get('status');
 
-    const sb = await createServerSupabaseClient();
+    const sb = createAPIClient();
 
     // Fetch items and groups in parallel
     let itemsQ = sb
