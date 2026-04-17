@@ -12,6 +12,7 @@ import {
   upsertKeyResult as dbUpsertKeyResult,
   deleteKeyResult as dbDeleteKeyResult,
 } from '@/lib/supabase/queries';
+import { syncWrite } from '@/lib/utils/syncWrite';
 import { useActivityStore } from './activityStore';
 
 const hasSupabase = false; // TODO: restore when Supabase is configured
@@ -98,9 +99,7 @@ export const useOKRsStore = create<OKRsState>()(
           if (patch.confidence !== undefined) dbPatch.confidence = patch.confidence;
           if (patch.currentValue !== undefined) dbPatch.current_value = patch.currentValue;
           if (Object.keys(dbPatch).length > 0) {
-            dbPatchKeyResult(krId, dbPatch).catch((err) => {
-              console.error('[okrsStore] updateKeyResult persist failed:', err);
-            });
+            syncWrite(`update key result ${krId}`, () => dbPatchKeyResult(krId, dbPatch));
           }
         }
       },
@@ -109,17 +108,13 @@ export const useOKRsStore = create<OKRsState>()(
         let newCheckIn: CheckIn;
 
         if (hasSupabase) {
-          try {
-            newCheckIn = await dbAddCheckIn(objectiveId, krId, checkIn);
-          } catch (err) {
-            console.error('[okrsStore] addCheckIn persist failed:', err);
-            newCheckIn = {
-              id: `ci-${Date.now()}`,
-              value: checkIn.value,
-              note: checkIn.note,
-              createdAt: new Date().toISOString(),
-            };
-          }
+          const result = await syncWrite(`add check-in to ${krId}`, () => dbAddCheckIn(objectiveId, krId, checkIn));
+          newCheckIn = result ?? {
+            id: `ci-${Date.now()}`,
+            value: checkIn.value,
+            note: checkIn.note,
+            createdAt: new Date().toISOString(),
+          };
         } else {
           newCheckIn = {
             id: `ci-${Date.now()}`,
@@ -160,9 +155,7 @@ export const useOKRsStore = create<OKRsState>()(
         useActivityStore.getState().log(`Created new objective: "${obj.title}"`, 'created');
         if (hasSupabase) {
           const wsId = get()._loadedWorkspaceId ?? undefined;
-          dbUpsertObjective(obj, wsId).catch((err) => {
-            console.error('[okrsStore] addObjective persist failed:', err);
-          });
+          syncWrite(`create objective "${obj.title}"`, () => dbUpsertObjective(obj, wsId));
         }
       },
 
@@ -176,9 +169,7 @@ export const useOKRsStore = create<OKRsState>()(
           const updated = get().objectives.find(o => o.id === id);
           if (updated) {
             const wsId = get()._loadedWorkspaceId ?? undefined;
-            dbUpsertObjective(updated, wsId).catch((err) => {
-              console.error('[okrsStore] updateObjective persist failed:', err);
-            });
+            syncWrite(`update objective "${updated.title}"`, () => dbUpsertObjective(updated, wsId));
           }
         }
       },
@@ -192,9 +183,8 @@ export const useOKRsStore = create<OKRsState>()(
           useActivityStore.getState().log(`Deleted objective: "${obj.title}"`, 'status_change');
         }
         if (hasSupabase) {
-          dbDeleteObjective(id).catch((err) => {
-            console.error('[okrsStore] deleteObjective persist failed:', err);
-          });
+          const label = obj ? `delete "${obj.title}"` : `delete objective ${id}`;
+          syncWrite(label, () => dbDeleteObjective(id));
         }
       },
 
@@ -208,9 +198,7 @@ export const useOKRsStore = create<OKRsState>()(
           const updated = get().objectives.find(o => o.id === id);
           if (updated) {
             const wsId = get()._loadedWorkspaceId ?? undefined;
-            dbUpsertObjective(updated, wsId).catch((err) => {
-              console.error('[okrsStore] updateObjectiveStatus persist failed:', err);
-            });
+            syncWrite(`update objective status "${updated.title}"`, () => dbUpsertObjective(updated, wsId));
           }
         }
       },
@@ -226,9 +214,7 @@ export const useOKRsStore = create<OKRsState>()(
         useActivityStore.getState().log(`Added key result "${kr.title}"`, 'created');
         if (hasSupabase) {
           const wsId = get()._loadedWorkspaceId ?? undefined;
-          dbUpsertKeyResult(kr, wsId).catch((err) => {
-            console.error('[okrsStore] addKeyResult persist failed:', err);
-          });
+          syncWrite(`create key result "${kr.title}"`, () => dbUpsertKeyResult(kr, wsId));
         }
       },
 
@@ -245,9 +231,8 @@ export const useOKRsStore = create<OKRsState>()(
           useActivityStore.getState().log(`Removed key result "${kr.title}"`, 'status_change');
         }
         if (hasSupabase) {
-          dbDeleteKeyResult(krId).catch((err) => {
-            console.error('[okrsStore] removeKeyResult persist failed:', err);
-          });
+          const label = kr ? `delete key result "${kr.title}"` : `delete key result ${krId}`;
+          syncWrite(label, () => dbDeleteKeyResult(krId));
         }
       },
     }),

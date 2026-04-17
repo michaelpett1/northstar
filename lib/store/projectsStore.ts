@@ -12,6 +12,7 @@ import {
   upsertTimelineGroup,
   deleteTimelineGroup as dbDeleteTimelineGroup,
 } from '@/lib/supabase/queries';
+import { syncWrite } from '@/lib/utils/syncWrite';
 import { useActivityStore } from './activityStore';
 import { useRoadmapStore } from './roadmapStore';
 
@@ -157,9 +158,8 @@ export const useProjectsStore = create<ProjectsState>()(
         }
 
         if (hasSupabase) {
-          patchTimelineItem(id, patch).catch((err) => {
-            console.error('[projectsStore] updateItem persist failed:', err);
-          });
+          const label = item ? `update "${item.title}"` : `update item ${id}`;
+          syncWrite(label, () => patchTimelineItem(id, patch));
         }
 
         // Sync to linked RoadmapTask
@@ -187,9 +187,7 @@ export const useProjectsStore = create<ProjectsState>()(
         useActivityStore.getState().log(`Created new ${item.type}: "${item.title}"`, 'created');
         if (hasSupabase) {
           const wsId = get()._loadedWorkspaceId ?? undefined;
-          upsertTimelineItem(item, wsId).catch((err) => {
-            console.error('[projectsStore] addItem persist failed:', err);
-          });
+          syncWrite(`create "${item.title}"`, () => upsertTimelineItem(item, wsId));
         }
       },
 
@@ -203,9 +201,8 @@ export const useProjectsStore = create<ProjectsState>()(
           useActivityStore.getState().log(`Deleted ${item.type}: "${item.title}"`, 'status_change');
         }
         if (hasSupabase) {
-          deleteTimelineItem(id).catch((err) => {
-            console.error('[projectsStore] deleteItem persist failed:', err);
-          });
+          const label = item ? `delete "${item.title}"` : `delete item ${id}`;
+          syncWrite(label, () => deleteTimelineItem(id));
         }
       },
 
@@ -224,7 +221,8 @@ export const useProjectsStore = create<ProjectsState>()(
           // Persist sort order to Supabase
           if (hasSupabase) {
             items.forEach((item, idx) => {
-              patchTimelineItem(item.id, { sortOrder: idx } as never).catch(() => {});
+              // Silent: bulk reorder produces too many toasts; individual failures are recoverable on next edit
+              syncWrite(`reorder "${item.title}"`, () => patchTimelineItem(item.id, { sortOrder: idx } as never), { silent: true });
             });
           }
           return { items };
@@ -236,9 +234,7 @@ export const useProjectsStore = create<ProjectsState>()(
         if (hasSupabase) {
           const wsId = get()._loadedWorkspaceId ?? undefined;
           const newLen = get().groups.length;
-          upsertTimelineGroup(group, newLen - 1, wsId).catch((err) => {
-            console.error('[projectsStore] addGroup persist failed:', err);
-          });
+          syncWrite(`create group "${group.name}"`, () => upsertTimelineGroup(group, newLen - 1, wsId));
         }
       },
       updateGroup: (id, patch) => {
@@ -250,9 +246,7 @@ export const useProjectsStore = create<ProjectsState>()(
           const updated = get().groups.find(g => g.id === id);
           const idx = get().groups.findIndex(g => g.id === id);
           if (updated) {
-            upsertTimelineGroup(updated, idx, wsId).catch((err) => {
-              console.error('[projectsStore] updateGroup persist failed:', err);
-            });
+            syncWrite(`update group "${updated.name}"`, () => upsertTimelineGroup(updated, idx, wsId));
           }
         }
       },
@@ -262,13 +256,11 @@ export const useProjectsStore = create<ProjectsState>()(
           items: s.items.map(i => i.groupId === id ? { ...i, groupId: '' } : i),
         }));
         if (hasSupabase) {
-          dbDeleteTimelineGroup(id).catch((err) => {
-            console.error('[projectsStore] removeGroup persist failed:', err);
-          });
+          syncWrite(`delete group ${id}`, () => dbDeleteTimelineGroup(id));
           // Also update items that had this groupId
           const items = get().items.filter(i => i.groupId === '');
           items.forEach(i => {
-            patchTimelineItem(i.id, { groupId: '' } as never).catch(() => {});
+            syncWrite(`unlink "${i.title}" from group`, () => patchTimelineItem(i.id, { groupId: '' } as never), { silent: true });
           });
         }
       },
